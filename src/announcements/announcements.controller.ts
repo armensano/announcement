@@ -40,7 +40,10 @@ export class AnnouncementsController {
   ) {
     return this.announcementsService.create(user.id, {
       ...createAnnouncementDto,
-      images: images.images.map((image) => image.filename),
+      images:
+        images?.images?.length > 0
+          ? images.images.map((image) => image.filename)
+          : undefined,
       tags: JSON.parse(createAnnouncementDto.tags),
     });
   }
@@ -48,8 +51,8 @@ export class AnnouncementsController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
-  findAll() {
-    return this.announcementsService.findAll();
+  findAll(@GetUser() user: JwtPayload) {
+    return this.announcementsService.findAll(user.id);
   }
 
   @Get(':id')
