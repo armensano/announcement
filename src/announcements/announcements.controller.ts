@@ -69,9 +69,14 @@ export class AnnouncementsController {
   update(
     @Param('id') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
+    @UploadedFiles() images: any,
   ) {
     return this.announcementsService.update(+id, {
       ...updateAnnouncementDto,
+      images:
+        images?.images?.length > 0
+          ? images.images.map((image) => image.filename)
+          : undefined,
       tags: JSON.parse(updateAnnouncementDto.tags),
     });
   }

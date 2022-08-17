@@ -18,7 +18,9 @@ export class AnnouncementsService {
   }
 
   async findAll() {
-    return await this.announcementRepository.find();
+    return await this.announcementRepository.find({
+      order: { created_at: 'DESC' },
+    });
   }
 
   async findOne(id: number) {
