@@ -17,9 +17,10 @@ export class AnnouncementsService {
     return result;
   }
 
-  async findAll() {
+  async findAll(userId: number) {
     return await this.announcementRepository.find({
       order: { created_at: 'DESC' },
+      where: { userId },
     });
   }
 
