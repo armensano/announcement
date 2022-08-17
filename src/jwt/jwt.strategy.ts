@@ -37,7 +37,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy) {
     }
 
     return {
-      id: payload.id,
+      id: user.id,
       email: payload.email,
       token: user.token,
     };

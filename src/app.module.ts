@@ -6,6 +6,8 @@ import { AnnouncementsModule } from './announcements/announcements.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './configs/configs';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -13,6 +15,9 @@ import { TypeOrmConfigService } from './configs/configs';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     AuthModule,
     AnnouncementsModule,
   ],

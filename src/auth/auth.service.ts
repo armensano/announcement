@@ -19,18 +19,25 @@ export class AuthService {
     private readonly jwtAuthService: JwtAuthService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<IUser> {
+  async create(createUserDto: CreateUserDto): Promise<IAccessToken> {
     const { password, email } = createUserDto;
     const findUser = await this.findOneByEmail(email);
     if (findUser) {
       throw new InternalServerErrorException('User already exists');
     }
     const hash = await bcrypt.hash(password, SALT_OR_ROUNDS);
-    const user: IUser = await this.userRepository.save({
+    const user: IUser = await this.userRepository.create({
       ...createUserDto,
       password: hash,
     });
-    return user;
+
+    const token = await this.jwtAuthService.createAccessToken({
+      id: user.id,
+      email: user.email,
+    });
+    user.token = token.accessToken;
+    await this.userRepository.save(user);
+    return token;
   }
 
   findOneByEmail(email: string) {

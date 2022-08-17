@@ -18,6 +18,7 @@ import { CheckDBJwtAuthGuard } from 'src/jwt/jwt.guards';
 import { JwtPayload } from 'src/jwt/jwt.strategy';
 import { GetUser } from 'src/shared/decorator/get-user';
 import { MessageToUser } from './response/message-to-user.response';
+import { AccessToken } from './response/access-token.response';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -29,12 +30,8 @@ export class AuthController {
   ) {}
 
   @Post('signup')
-  async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.authService.create(createUserDto);
-    return this.jwtAuthService.createAccessToken({
-      id: user.id,
-      email: user.email,
-    });
+  async create(@Body() createUserDto: CreateUserDto): Promise<AccessToken> {
+    return await this.authService.create(createUserDto);
   }
 
   @Post('login')

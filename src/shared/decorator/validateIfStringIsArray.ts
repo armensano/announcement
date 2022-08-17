@@ -18,15 +18,16 @@ export function IsArray(
       validator: {
         validate(values: string, options: ValidationArguments) {
           try {
-            const list: string[] = JSON.parse(values);
+            const list: string[] = Array.isArray(values)
+              ? values
+              : JSON.parse(values);
             if (!Array.isArray(list)) {
               return false;
             }
-            const isAllNumbers = list.every((item) => typeof item === 'string');
-            if (!isAllNumbers) {
+            const isAllStrings = list.every((item) => typeof item === 'string');
+            if (!isAllStrings) {
               return false;
             }
-
             return true;
           } catch (err) {
             return false;
