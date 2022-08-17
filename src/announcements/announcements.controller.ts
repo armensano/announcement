@@ -20,6 +20,7 @@ import { CREATE_UPDATE_SCENT_FILE_TYPES } from '../constants';
 import { CheckDBJwtAuthGuard } from 'src/jwt/jwt.guards';
 import { GetUser } from 'src/shared/decorator/get-user';
 import { JwtPayload } from 'src/jwt/jwt.strategy';
+import { CreateAnnouncementResponse } from './response/announcement.response';
 
 @ApiTags('announcements')
 @Controller('announcements')
@@ -37,7 +38,7 @@ export class AnnouncementsController {
     @Body() createAnnouncementDto: CreateAnnouncementDto,
     @UploadedFiles() images: any,
     @GetUser() user: JwtPayload,
-  ) {
+  ): Promise<CreateAnnouncementResponse> {
     return this.announcementsService.create(user.id, {
       ...createAnnouncementDto,
       images:
@@ -51,14 +52,14 @@ export class AnnouncementsController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
-  findAll(@GetUser() user: JwtPayload) {
+  findAll(@GetUser() user: JwtPayload): Promise<CreateAnnouncementResponse[]> {
     return this.announcementsService.findAll(user.id);
   }
 
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
     return this.announcementsService.findOne(+id);
   }
 
@@ -73,7 +74,7 @@ export class AnnouncementsController {
     @Param('id') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
     @UploadedFiles() images: any,
-  ) {
+  ): Promise<CreateAnnouncementResponse> {
     return this.announcementsService.update(+id, {
       ...updateAnnouncementDto,
       images:
@@ -87,7 +88,7 @@ export class AnnouncementsController {
   @Delete(':id')
   @UseGuards(CheckDBJwtAuthGuard)
   @ApiBearerAuth()
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
     return this.announcementsService.remove(+id);
   }
 }
