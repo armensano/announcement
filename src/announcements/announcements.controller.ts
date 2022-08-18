@@ -34,12 +34,12 @@ export class AnnouncementsController {
   )
   @ApiConsumes('multipart/form-data')
   @UseGuards(CheckDBJwtAuthGuard)
-  create(
+  async create(
     @Body() createAnnouncementDto: CreateAnnouncementDto,
     @UploadedFiles() images: any,
     @GetUser() user: JwtPayload,
   ): Promise<CreateAnnouncementResponse> {
-    return this.announcementsService.create(user.id, {
+    const result = await this.announcementsService.create(user.id, {
       ...createAnnouncementDto,
       images:
         images?.images?.length > 0
@@ -47,20 +47,25 @@ export class AnnouncementsController {
           : undefined,
       tags: JSON.parse(createAnnouncementDto.tags),
     });
+    return CreateAnnouncementResponse.from(result);
   }
 
   @Get()
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
-  findAll(@GetUser() user: JwtPayload): Promise<CreateAnnouncementResponse[]> {
-    return this.announcementsService.findAll(user.id);
+  async findAll(
+    @GetUser() user: JwtPayload,
+  ): Promise<CreateAnnouncementResponse[]> {
+    const result = await this.announcementsService.findAll(user.id);
+    return CreateAnnouncementResponse.from(result);
   }
 
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
-  findOne(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
-    return this.announcementsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
+    const result = await this.announcementsService.findOne(+id);
+    return CreateAnnouncementResponse.from(result);
   }
 
   @Patch(':id')
@@ -70,12 +75,12 @@ export class AnnouncementsController {
   )
   @ApiConsumes('multipart/form-data')
   @UseGuards(CheckDBJwtAuthGuard)
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
     @UploadedFiles() images: any,
   ): Promise<CreateAnnouncementResponse> {
-    return this.announcementsService.update(+id, {
+    const result = await this.announcementsService.update(+id, {
       ...updateAnnouncementDto,
       images:
         images?.images?.length > 0
@@ -83,12 +88,14 @@ export class AnnouncementsController {
           : undefined,
       tags: JSON.parse(updateAnnouncementDto.tags),
     });
+    return CreateAnnouncementResponse.from(result);
   }
 
   @Delete(':id')
   @UseGuards(CheckDBJwtAuthGuard)
   @ApiBearerAuth()
-  remove(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
-    return this.announcementsService.remove(+id);
+  async remove(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
+    const result = await this.announcementsService.remove(+id);
+    return CreateAnnouncementResponse.from(result);
   }
 }

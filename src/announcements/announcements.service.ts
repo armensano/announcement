@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Announcement } from 'src/entities/announcement.entity';
 import { Repository } from 'typeorm';
 import { IAnnouncement } from './interface/create-announcement.interface';
+import { ReturnAnnouncement } from './interface/return-announcement.interface';
 import { IUpdateAnnouncement } from './interface/update-announcement.interface';
 
 @Injectable()
@@ -13,28 +14,28 @@ export class AnnouncementsService {
   async create(
     userId: number,
     createAnnouncementDto: IAnnouncement,
-  ): Promise<IAnnouncement> {
+  ): Promise<ReturnAnnouncement> {
     return await this.announcementRepository.save({
       ...createAnnouncementDto,
       userId,
     });
   }
 
-  async findAll(userId: number): Promise<IAnnouncement[]> {
+  async findAll(userId: number): Promise<ReturnAnnouncement[]> {
     return await this.announcementRepository.find({
       order: { created_at: 'DESC' },
       where: { userId },
     });
   }
 
-  async findOne(id: number): Promise<IAnnouncement> {
+  async findOne(id: number): Promise<ReturnAnnouncement> {
     return await this.announcementRepository.findOneBy({ id });
   }
 
   async update(
     id: number,
     updateAnnouncementDto: IUpdateAnnouncement,
-  ): Promise<IAnnouncement> {
+  ): Promise<ReturnAnnouncement> {
     const announcement = await this.announcementRepository.findOneBy({ id });
     if (announcement) {
       return await this.announcementRepository.save({
@@ -46,7 +47,7 @@ export class AnnouncementsService {
     }
   }
 
-  async remove(id: number): Promise<IAnnouncement> {
+  async remove(id: number): Promise<ReturnAnnouncement> {
     const announcement = await this.announcementRepository.findOneBy({ id });
     if (announcement) {
       await this.announcementRepository.delete(id);
