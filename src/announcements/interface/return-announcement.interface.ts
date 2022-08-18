@@ -1,4 +1,4 @@
-import { IAnnouncement } from './create-announcement.interface';
+import { IAnnouncement } from './announcement.interface';
 
 export class ReturnAnnouncement extends IAnnouncement {
   id: number;

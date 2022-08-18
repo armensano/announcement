@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, plainToClass } from 'class-transformer';
-import { IAnnouncement } from '../interface/create-announcement.interface';
+import { IAnnouncement } from '../interface/announcement.interface';
 
 export class CreateAnnouncementResponse {
   @ApiProperty()

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Announcement } from 'src/entities/announcement.entity';
 import { Repository } from 'typeorm';
-import { IAnnouncement } from './interface/create-announcement.interface';
+import { IAnnouncement } from './interface/announcement.interface';
 import { ReturnAnnouncement } from './interface/return-announcement.interface';
 import { IUpdateAnnouncement } from './interface/update-announcement.interface';
 
