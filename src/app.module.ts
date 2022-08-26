@@ -16,7 +16,8 @@ import { join } from 'path';
     }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '/public/uploads'),
+      serveRoot: '/uploads',
     }),
     AuthModule,
     AnnouncementsModule,
