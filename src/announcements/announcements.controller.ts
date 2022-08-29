@@ -56,9 +56,11 @@ export class AnnouncementsController {
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
   async searchAnnouncements(
+    @GetUser() user: JwtPayload,
     @Body() searchAnnouncementsDto: SearchAnnouncementDto,
   ): Promise<CreateAnnouncementResponse[]> {
     const result = await this.announcementsService.searchAnnouncements(
+      user.id,
       searchAnnouncementsDto,
     );
     return CreateAnnouncementResponse.from(result);

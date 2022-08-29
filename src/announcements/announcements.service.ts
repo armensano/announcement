@@ -62,14 +62,25 @@ export class AnnouncementsService {
   }
 
   async searchAnnouncements(
+    userId: number,
     searchAnnouncementsDto: SearchAnnouncementDto,
   ): Promise<ReturnAnnouncement[]> {
-    const { limit, page, description, tags, city, region, price, categoryId } =
-      searchAnnouncementsDto;
+    const {
+      limit,
+      page,
+      description,
+      tags,
+      city,
+      region,
+      price,
+      categoryId,
+      onlyMine,
+    } = searchAnnouncementsDto;
     const offset = (page - 1) * limit;
 
     return await this.announcementRepository
       .createQueryBuilder('announcement')
+      .leftJoinAndMapOne('announcement.user', 'announcement.user', 'user')
       .where(description ? 'description ILIKE :description' : '1=1', {
         description: `%${description}%`,
       })
@@ -87,6 +98,9 @@ export class AnnouncementsService {
       })
       .andWhere(categoryId ? '"categoryId" = :categoryId' : '1=1', {
         categoryId,
+      })
+      .andWhere(onlyMine ? '"userId" = :userId' : '1=1', {
+        userId,
       })
       .orderBy('created_at', 'DESC')
       .limit(limit)

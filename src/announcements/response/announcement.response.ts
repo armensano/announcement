@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, plainToClass } from 'class-transformer';
+import { Exclude, plainToClass, Transform } from 'class-transformer';
+import { User } from 'src/entities/user.entity';
 import { IAnnouncement } from '../interface/announcement.interface';
 
 export class CreateAnnouncementResponse {
@@ -29,6 +30,9 @@ export class CreateAnnouncementResponse {
 
   @Exclude()
   updated_at: Date;
+
+  @Transform(({ value }) => value.name)
+  user: User;
 
   static from(announcement: IAnnouncement): CreateAnnouncementResponse;
 
