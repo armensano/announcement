@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { IsArray } from '../../shared/decorator/validateIfStringIsArray';
 import { IsNumber } from '../../shared/decorator/validateIfStringIsNumber';
 
@@ -25,10 +25,12 @@ export class CreateAnnouncementDto {
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   region: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   city: string;
 
   @IsNumber('announcement', {

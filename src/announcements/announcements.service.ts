@@ -102,10 +102,22 @@ export class AnnouncementsService {
       .andWhere(onlyMine ? '"userId" = :userId' : '1=1', {
         userId,
       })
+      .select([
+        'announcement.id as id',
+        'announcement.description as description',
+        "string_to_array(announcement.tags, ',') as tags",
+        "string_to_array(announcement.images, ',') as images",
+        'announcement.city as city',
+        'announcement.region as region',
+        'announcement.price as price',
+        'announcement.categoryId as categoryId',
+        'user.name as name',
+      ])
+      .addSelect([`user.id = ${userId} as owner`])
       .orderBy('created_at', 'DESC')
       .limit(limit)
       .offset(offset)
-      .getMany();
+      .getRawMany();
   }
 
   async getCities(): Promise<string[]> {
