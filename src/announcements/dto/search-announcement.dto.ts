@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class SearchAnnouncementDto {
   @IsNumber()
@@ -62,6 +62,14 @@ export class SearchAnnouncementDto {
     description: 'category search query',
   })
   @IsOptional()
-  @IsString()
-  category: string;
+  @IsNumber()
+  categoryId: string;
+
+  @ApiProperty({
+    type: Boolean,
+    description: 'is the announcement yours?',
+  })
+  @IsOptional()
+  @IsBoolean()
+  onlyMine: boolean;
 }

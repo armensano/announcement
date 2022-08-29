@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, ValidateNested } from 'class-validator';
+import { IsString } from 'class-validator';
 import { IsArray } from '../../shared/decorator/validateIfStringIsArray';
-import { IsBoolean } from '../../shared/decorator/validateIfStringIsBoolean';
 import { IsNumber } from '../../shared/decorator/validateIfStringIsNumber';
 
 export class CreateAnnouncementDto {
@@ -31,4 +30,9 @@ export class CreateAnnouncementDto {
   @ApiProperty()
   @IsString()
   city: string;
+
+  @IsNumber('announcement', {
+    message: 'categoryId must be a number',
+  })
+  categoryId: number;
 }

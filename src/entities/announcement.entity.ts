@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from './category.entity';
 import { User } from './user.entity';
 
 @Entity()
@@ -28,10 +29,10 @@ export class Announcement {
   @Column()
   region: string;
 
-  @Column({
-    nullable: true,
-  })
-  category: string;
+  @Column()
+  categoryId: number;
+  @ManyToOne(() => Category, (category) => category.announcement)
+  category: Category;
 
   @Column()
   city: string;

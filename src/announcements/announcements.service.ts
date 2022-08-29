@@ -64,7 +64,7 @@ export class AnnouncementsService {
   async searchAnnouncements(
     searchAnnouncementsDto: SearchAnnouncementDto,
   ): Promise<ReturnAnnouncement[]> {
-    const { limit, page, description, tags, city, region, price, category } =
+    const { limit, page, description, tags, city, region, price, categoryId } =
       searchAnnouncementsDto;
     const offset = (page - 1) * limit;
 
@@ -85,12 +85,30 @@ export class AnnouncementsService {
       .andWhere(price ? 'price <= :price' : '1=1', {
         price,
       })
-      .andWhere(category ? 'category = :category' : '1=1', {
-        category,
+      .andWhere(categoryId ? '"categoryId" = :categoryId' : '1=1', {
+        categoryId,
       })
       .orderBy('created_at', 'DESC')
       .limit(limit)
       .offset(offset)
       .getMany();
+  }
+
+  async getCities(): Promise<string[]> {
+    return await this.announcementRepository
+      .createQueryBuilder('announcement')
+      .select('city as city')
+      .distinctOn(['city'])
+      .getRawMany()
+      .then((res) => res.map(({ city }) => city));
+  }
+
+  async getRegions(): Promise<string[]> {
+    return await this.announcementRepository
+      .createQueryBuilder('announcement')
+      .select('region as region')
+      .distinctOn(['region'])
+      .getRawMany()
+      .then((res) => res.map(({ region }) => region));
   }
 }

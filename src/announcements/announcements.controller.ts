@@ -64,6 +64,22 @@ export class AnnouncementsController {
     return CreateAnnouncementResponse.from(result);
   }
 
+  @Get('cities')
+  @ApiBearerAuth()
+  @UseGuards(CheckDBJwtAuthGuard)
+  async getCities(): Promise<string[]> {
+    const result = await this.announcementsService.getCities();
+    return result;
+  }
+
+  @Get('regions')
+  @ApiBearerAuth()
+  @UseGuards(CheckDBJwtAuthGuard)
+  async getRegions(): Promise<string[]> {
+    const result = await this.announcementsService.getRegions();
+    return result;
+  }
+
   @Get()
   @ApiBearerAuth()
   @UseGuards(CheckDBJwtAuthGuard)
