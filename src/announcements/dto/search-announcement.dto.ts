@@ -56,4 +56,12 @@ export class SearchAnnouncementDto {
     example: 10,
   })
   price: number;
+
+  @ApiProperty({
+    type: String,
+    description: 'category search query',
+  })
+  @IsOptional()
+  @IsString()
+  category: string;
 }

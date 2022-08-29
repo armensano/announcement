@@ -28,6 +28,11 @@ export class Announcement {
   @Column()
   region: string;
 
+  @Column({
+    nullable: true,
+  })
+  category: string;
+
   @Column()
   city: string;
 

@@ -64,7 +64,7 @@ export class AnnouncementsService {
   async searchAnnouncements(
     searchAnnouncementsDto: SearchAnnouncementDto,
   ): Promise<ReturnAnnouncement[]> {
-    const { limit, page, description, tags, city, region, price } =
+    const { limit, page, description, tags, city, region, price, category } =
       searchAnnouncementsDto;
     const offset = (page - 1) * limit;
 
@@ -84,6 +84,9 @@ export class AnnouncementsService {
       })
       .andWhere(price ? 'price <= :price' : '1=1', {
         price,
+      })
+      .andWhere(category ? 'category = :category' : '1=1', {
+        category,
       })
       .orderBy('created_at', 'DESC')
       .limit(limit)
