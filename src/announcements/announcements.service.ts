@@ -21,10 +21,13 @@ export class AnnouncementsService {
     });
   }
 
-  async findAll(userId: number): Promise<ReturnAnnouncement[]> {
+  async findAll(
+    userId: number,
+    onlyMine: boolean,
+  ): Promise<ReturnAnnouncement[]> {
     return await this.announcementRepository.find({
+      where: onlyMine ? { userId } : {},
       order: { created_at: 'DESC' },
-      where: { userId },
     });
   }
 

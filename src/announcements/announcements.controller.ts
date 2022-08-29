@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UseGuards,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AnnouncementsService } from './announcements.service';
@@ -55,8 +56,12 @@ export class AnnouncementsController {
   @UseGuards(CheckDBJwtAuthGuard)
   async findAll(
     @GetUser() user: JwtPayload,
+    @Query('onlyMine') onlyMine: string,
   ): Promise<CreateAnnouncementResponse[]> {
-    const result = await this.announcementsService.findAll(user.id);
+    const result = await this.announcementsService.findAll(
+      user.id,
+      onlyMine === 'true',
+    );
     return CreateAnnouncementResponse.from(result);
   }
 
