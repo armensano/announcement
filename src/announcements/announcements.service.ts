@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Announcement } from 'src/entities/announcement.entity';
 import { Repository } from 'typeorm';
+import { SearchAnnouncementDto } from './dto/search-announcement.dto';
 import { IAnnouncement } from './interface/announcement.interface';
 import { ReturnAnnouncement } from './interface/return-announcement.interface';
 import { IUpdateAnnouncement } from './interface/update-announcement.interface';
@@ -58,5 +59,35 @@ export class AnnouncementsService {
     } else {
       throw new NotFoundException('Announcement not found');
     }
+  }
+
+  async searchAnnouncements(
+    searchAnnouncementsDto: SearchAnnouncementDto,
+  ): Promise<ReturnAnnouncement[]> {
+    const { limit, page, description, tags, city, region, price } =
+      searchAnnouncementsDto;
+    const offset = (page - 1) * limit;
+
+    return await this.announcementRepository
+      .createQueryBuilder('announcement')
+      .where(description ? 'description ILIKE :description' : '1=1', {
+        description: `%${description}%`,
+      })
+      .andWhere(tags ? 'tags ILIKE :tags' : '1=1', {
+        tags: `%${tags}%`,
+      })
+      .andWhere(city ? 'city ILIKE :city' : '1=1', {
+        city: `%${city}%`,
+      })
+      .andWhere(region ? 'region ILIKE :region' : '1=1', {
+        region: `%${region}%`,
+      })
+      .andWhere(price ? 'price <= :price' : '1=1', {
+        price,
+      })
+      .orderBy('created_at', 'DESC')
+      .limit(limit)
+      .offset(offset)
+      .getMany();
   }
 }

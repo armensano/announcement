@@ -22,6 +22,7 @@ import { CheckDBJwtAuthGuard } from 'src/jwt/jwt.guards';
 import { GetUser } from 'src/shared/decorator/get-user';
 import { JwtPayload } from 'src/jwt/jwt.strategy';
 import { CreateAnnouncementResponse } from './response/announcement.response';
+import { SearchAnnouncementDto } from './dto/search-announcement.dto';
 
 @ApiTags('announcements')
 @Controller('announcements')
@@ -48,6 +49,18 @@ export class AnnouncementsController {
           : undefined,
       tags: JSON.parse(createAnnouncementDto.tags),
     });
+    return CreateAnnouncementResponse.from(result);
+  }
+
+  @Post('search')
+  @ApiBearerAuth()
+  @UseGuards(CheckDBJwtAuthGuard)
+  async searchAnnouncements(
+    @Body() searchAnnouncementsDto: SearchAnnouncementDto,
+  ): Promise<CreateAnnouncementResponse[]> {
+    const result = await this.announcementsService.searchAnnouncements(
+      searchAnnouncementsDto,
+    );
     return CreateAnnouncementResponse.from(result);
   }
 
