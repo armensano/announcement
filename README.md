@@ -1,4 +1,4 @@
-
+## The site also is available at [https://announcement.vercel.app/](https://announcement.vercel.app/)
 ## Installation
 
 ```bash
